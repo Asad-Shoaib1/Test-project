@@ -16,7 +16,8 @@ class StudentController extends Controller
      */
     public function index()
     {
-        $students = User::all();
+        $students = User::with('courses')->get();
+        // dd($students);
        return view('students-data',compact('students'));
     }
 
@@ -25,8 +26,8 @@ class StudentController extends Controller
      */
     public function create()
     {
-        $course = course::all();
-        return view('createstudents',compact('course'));
+        $courses = course::all();
+        return view('createstudents',compact('courses'));
     }
 
     /**
@@ -42,15 +43,24 @@ class StudentController extends Controller
         
         'password'=>['required','min:8']
        ]);
+       
+      
              $user = new User;
              $user->name = $request->name;
              $user->lastname = $request->lastname;
              $user->email = $request->email;
              $user->phoneno = $request->phoneno;
              $user->address = $request->address;
-             $user->coursename = $request->coursename;
-             
+             $user->coursename = json_encode($request->coursename);
+            
              $user->save();
+             $courseNames = $request->input('coursename');
+
+
+$selectedCourses = Course::whereIn('coursename', $courseNames)->pluck('id')->toArray();
+if ($selectedCourses !== null) {
+    $user->courses()->attach($selectedCourses);
+}
       return redirect()->route('student.show');
     }
 

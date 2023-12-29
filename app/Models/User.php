@@ -17,11 +17,12 @@ class User extends Authenticatable
      *
      * @var array<int, string>
      */
-
+    
      public function courses()
      {
-         return $this->belongsToMany(Course::class);
+         return $this->belongsToMany(Course::class, 'user_courses');
      }
+    
     protected $fillable = [
         'name',
         'lastname',

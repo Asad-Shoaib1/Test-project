@@ -19,6 +19,7 @@ return new class extends Migration
             $table->string('coursename')->nullable();
             $table->string('phoneno')->nullable();
             $table->string('address')->nullable();
+            $table->string('user_type')->default('user')->nullable();
             $table->string('gender')->nullable();
             $table->string('password')->nullable();
             $table->timestamps();

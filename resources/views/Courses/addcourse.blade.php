@@ -43,7 +43,7 @@ document.getElementById('showFormBtn').addEventListener('click', function() {
      
         <th scope="col">id</th>
         <th scope="col">Course Name</th>
-        <th>Students with courses</th>
+        
         
       </tr>
     </thead>
@@ -53,10 +53,8 @@ document.getElementById('showFormBtn').addEventListener('click', function() {
         <th scope="row">{{$courses->id}}</th>
         <td>{{$courses->coursename}}</td>
        
-        
-      
-       
-        <td> <a href="course/edit/{{$courses->id}}"  class = "btn-secondary"> Edit</a>
+        <td> 
+          <a href="course/edit/{{$courses->id}}"  class = "btn-secondary"> Edit</a>
             <a href="{{route('create.student')}}"  class = "btn-primary"> ADD</a>
             <a href="delete/{{$courses->id}}"  class = "btn-danger"> Delete</a></td>
         
