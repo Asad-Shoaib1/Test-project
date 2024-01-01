@@ -52,13 +52,9 @@
             </div>
 
         </div>
-        <div class="form-group mb-0">
-            <label for="exampleInputText2" class="h5">Subjects</label>
-            {{-- <select name="coursename" multiple="multiple" class="selectpicker form-control" data-style="py-0">
-          @foreach ($course as $courses) 
-              <option value="{{$courses->coursename}}">{{$courses->coursename}}</option> 
-          @endforeach
-      </select> --}}
+        {{-- <div class="form-group mb-0">
+            <label for="exampleInputText2" class="h5" required>Subjects</label> <br> @error('coursename')
+            <span class="text-danger">{{$message}}</span> @enderror
             <div class="form-group">
                 <div class="form-check">
                     @foreach ($courses as $course)
@@ -66,26 +62,12 @@
                         <input class="form-check-input" type="checkbox" value="{{ $course->coursename }}"
            id="course{{ $course->coursename }}" name="coursename[]">
     <label class="form-check-label" for="course{{ $course->coursename }}">{{ $course->coursename }}</label>
-                      {{-- <input class="form-check-input" type="checkbox" value="{{ $course->id }}"
-                          id="course{{ $course->id }}" name="coursename[]">
-                      <label class="form-check-label" for="course{{ $course->id }}">{{ $course->coursename }}</label> --}}
+                     @error('coursename[]')
+                     <span>{{$message}}</span> @enderror
                     </div>
                     @endforeach
                 </div>
-            </div>
-        </div>
-
-
-        <div class="form-group">
-            <div class="form-check">
-                <input class="form-check-input" type="checkbox" value="" id="invalidCheck" required>
-                <label class="form-check-label" for="invalidCheck">
-                    Agree to terms and conditions
-                </label>
-                <div class="invalid-feedback">
-                    You must agree before submitting.
-                </div>
-            </div>
+            </div> --}}
         </div>
         <button class="btn btn-primary" type="submit">Submit </button>
 

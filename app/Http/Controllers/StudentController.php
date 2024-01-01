@@ -6,76 +6,68 @@ use App\Models\User;
 use App\Models\course;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 
 use Illuminate\Http\Request;
 
 class StudentController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
         $students = User::with('courses')->get();
-        // dd($students);
        return view('students-data',compact('students'));
     }
-
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create()
     {
         $courses = course::all();
         return view('createstudents',compact('courses'));
     }
-
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
+ public function store(Request $request)
     {
-       
-       $validator = Validator::make($request->all(),[
-        'name'=>['required'],
-        'lastname'=>['required'],
-        'email'=>['required'],
+       Validator::make($request->all(), [
+            'name' => ['required'],
+            'lastname' => ['required'],
+            'email' => ['required', 'email'], 
+            'password' => ['required', 'min:8'],
+        ]);
         
-        'password'=>['required','min:8']
-       ]);
-       
-      
-             $user = new User;
-             $user->name = $request->name;
-             $user->lastname = $request->lastname;
-             $user->email = $request->email;
-             $user->phoneno = $request->phoneno;
-             $user->address = $request->address;
-             $user->coursename = json_encode($request->coursename);
-            
-             $user->save();
-             $courseNames = $request->input('coursename');
+$user = new User;
+$user->name = $request->name;
+$user->lastname = $request->lastname;
+$user->email = $request->email;
+$user->phoneno = $request->phoneno;
+$user->address = $request->address;
+$user->password = Hash::make($request->password);
 
+$user->save();
 
-$selectedCourses = Course::whereIn('coursename', $courseNames)->pluck('id')->toArray();
-if ($selectedCourses !== null) {
-    $user->courses()->attach($selectedCourses);
-}
-      return redirect()->route('student.show');
-    }
+return redirect()->route('student.show');
 
-    /**
-     * Display the specified resource.
-     */
-    public function show()
+ }
+    public function profile()
     {
-        // $user = User::find($id);
+        $users = User::where('id',Auth::id())->get();
+       
+       return view('profile',compact('users'));
          
     }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
+    public function profileedit(){
+        $user = Auth::user();
+        // dd($user);
+       
+     
+      
+        return view('profile-edit',compact('user'));
+    }
+    public function profileupdate(Request $request, string $id){
+      $user= $request->validate([
+        'name'=>'required',
+        'email'=>'required',
+       ]);
+      DB::table('Users')->where('id',$id)->update($user);
+      return redirect()->route('profile')->with('success','Profile Updated Successfully');
+        
+    }
     public function edit(string $id)
     {
         $user = User::find($id);
@@ -83,9 +75,6 @@ if ($selectedCourses !== null) {
         return view('new',compact('user'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(Request $request, string $id)
     {
       
@@ -100,10 +89,6 @@ if ($selectedCourses !== null) {
        return redirect()->route('student.show');
     }
     
-
-    /**
-     * Remove the specified resource from storage.
-     */
     public function delete(string $id)
     {
         

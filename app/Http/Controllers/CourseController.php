@@ -9,17 +9,7 @@ use Illuminate\Support\Facades\Auth;
 
 class CourseController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
-    {
-        //
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     */
+   
     public function create()
     {
         $course = Course::all();
@@ -27,9 +17,6 @@ class CourseController extends Controller
         return view('Courses.addcourse',compact('course','user'));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
        $request->validate([
@@ -39,42 +26,39 @@ class CourseController extends Controller
        return redirect()->back()->with('success','course created succeesfully');
 
     }
-
-    /**
-     * Display the specified resource.
-     */
-    public function show()
+    public function show($id)
     {
-        
-             $user = User::all();
-             
+        $user = User::find($id);      
         $test = User::where('id',Auth::id())->get('coursename');
-       
-        
-        return view('Courses.mycourse',compact('test'));
+        return view('Courses.mycourse',compact('test','user'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
     public function edit(string $id)
     {
        return view('Courses.courseedit');
     }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        //
+    public function allcourses(){
+        $course = Course::all();
+        return view('Courses.allcourses',compact('course'));
     }
+    public function addcourse($id){
+        $course = Course::find($id);
+        $data[] =$course->coursename;
+        
+        
+         $user = Auth::user();
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
+        //    $user->coursename =json_encode($course->coursename) ;
+        //  $user->save();
+         if ($user && $course) {
+           
+            $user->courses()->attach($course); 
+            return redirect()->route('allcourses')->with('success','Course added in your profile Successfully');
+            return response()->json(['success' => 'Course added successfully']);
+        } else {
+            return response()->json(['error' => 'Failed to add course']);
+        }
+       
+       
     }
 }

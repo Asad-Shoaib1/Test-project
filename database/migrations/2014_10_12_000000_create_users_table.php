@@ -22,6 +22,7 @@ return new class extends Migration
             $table->string('user_type')->default('user')->nullable();
             $table->string('gender')->nullable();
             $table->string('password')->nullable();
+            $table->rememberToken();
             $table->timestamps();
             $table->timestamp('email_verified_at')->nullable();
             

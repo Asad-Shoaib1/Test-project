@@ -8,7 +8,7 @@
                 <th>Name</th>
                 <th>Phone no</th>
                 <th>Email</th>
-                <th>Courses</th>
+                <th>Address</th>
                 {{-- <th style="min-width: 100px">Action</th> --}}
             </tr>
         </thead>
@@ -20,11 +20,10 @@
                     <td>{{ $student->name }}</td>
                     <td>{{ $student->phoneno }}</td>
                     <td>{{ $student->email }}</td>
-                        @foreach ($student->courses as $course)
-                        <td>{{$course->coursename}}</td> 
+                    <td>{{ $student->address }}</td>
+                        
                        
-                        @endforeach
-
+                      
 
                     {{-- <td><span class="badge bg-primary">Active</span></td> --}}
                     <td></td>
@@ -32,7 +31,7 @@
                     <td>
                         @can('isAdmin')
                             <a href="student/edit/{{ $student->id }}" class = "btn-secondary"> Edit</a>
-                            <a href="{{ route('create.student') }}" class = "btn-primary"> ADD</a>
+                            <a href="{{ route('students.add') }}" class = "btn-primary"> ADD</a>
                             <a href="delete/{{ $student->id }}" class = "btn-danger"> Delete</a>
                         @endcan
             @endforeach

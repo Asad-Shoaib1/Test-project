@@ -16,8 +16,6 @@
             <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" integrity="sha512-nMNlpuaDPrqlEls3IX/Q56H36qvBASwb3ipuo3MxeWbsQB1881ox0cRv7UPTgBlriqoynt35KjEwgGUeUXIPnw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
       </head>
       <body>
-        {{-- <x-app-layout>
-      </x-app-layout>  --}}
             <div class="wrapper d-flex align-items-stretch">
                 <nav id="sidebar" class="active">
                     <div class="custom-menu">
@@ -29,18 +27,33 @@
                     <div class="p-4">
                       <h1><a href="index.html" class="logo">{{Auth::user()->name}} </a></h1>
                 <ul class="list-unstyled components mb-5">
-                  <li class="active">
-                    <a href="{{route('student.show')}}"><span class="fa fa-home mr-3"></span> Students List</a>
+                <li class="active">
+                       <a href="{{route('student.show')}}"><span class="fa fa-home mr-3"></span> Students List</a> 
                   </li>
                   <li class="active">
-                      <a href="{{route('create.student')}}"><span class="fa fa-user mr-3"></span> Add Students</a>
+                @can('isAdmin')      <a href="{{route('create.student')}}"><span class="fa fa-user mr-3"></span> Add Students</a> @endcan
                   </li>
                   <li>
-                  <a href="{{route('create.course')}}"><span class="fa fa-briefcase mr-3"></span> Courses</a>
-                  </li>
+                    <a href="{{route('profile')}}"><span class="fa fa-briefcase mr-3"></span> My Profile</a>
+                    </li>
                   <li>
-                  <a href="{{route('course.view')}}"><span class="fa fa-sticky-note mr-3"></span> My Course</a>
+                @can('isAdmin')  <a href="{{route('create.course')}}"><span class="fa fa-briefcase mr-3"></span> Add Course</a> @endcan
                   </li>
+                  @auth
+    @php
+        $userId = auth()->id(); // Retrieve the ID of the authenticated user
+    @endphp
+
+    <!-- Sidebar link using the user's ID -->
+    <li>
+        <a href="course/view/{{ $userId }}">
+            <span class="fa fa-sticky-note mr-3"></span> My Courses
+        </a>
+    </li>
+@endauth
+                  <li>
+                    <a href="{{route('allcourses')}}"><span class="fa fa-sticky-note mr-3"></span> All Course</a>
+                    </li>
                   <li>
                   <a href="{{route('logout')}}"><span class="fa fa-paper-plane mr-3"></span> Log out</a>
                   </li>
@@ -69,10 +82,13 @@
             
               @yield('createstudent')
             @yield('student-data')
+            @yield('profile')
             @yield('edit-students')
             @yield('course')
             @yield('edit-course')
             @yield('my-course')
+            @yield('allcourses')
+            @yield('add-newcourse')
             </p>
           </div>
             </div>
@@ -89,4 +105,4 @@
       </body>
     </html>
    
-{{-- </x-app-layout> --}}
+
